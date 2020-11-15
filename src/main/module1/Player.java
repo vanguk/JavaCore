@@ -7,13 +7,19 @@ public abstract class Player {
     protected RockScissorsPaper rockScissorsPaper;
 
 
-    public RockScissorsPaper getMove() {
-        rockScissorsPaper = RockScissorsPaper.values()[new Random().nextInt(RockScissorsPaper.values().length)];
-        System.out.println("");
-        return rockScissorsPaper = RockScissorsPaper.values()[new Random().nextInt(RockScissorsPaper.values().length)];
+    public abstract boolean playAgain();
+
+    public static int getId() {
+        return id;
     }
 
-    public abstract boolean playAgain();
+    public static void setId(int id) {
+        Player.id = id;
+    }
+
+    public RockScissorsPaper getRockScissorsPaper() {
+        return rockScissorsPaper;
+    }
 
     public void setRockScissorsPaper(RockScissorsPaper rockScissorsPaper) {
         this.rockScissorsPaper = rockScissorsPaper;

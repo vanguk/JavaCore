@@ -22,24 +22,6 @@ public class User extends Player {
         return firstChar == 'Д';
     }
 
-    @Override
-    public RockScissorsPaper getMove() {
-        System.out.println("Ход игрока : Player " + name);
-        System.out.print("Выбирите : Камень, Ножницы или Бумага \n");
-        String userStr = new Scanner(System.in).nextLine();
-        userStr = userStr.toUpperCase();
-        char charUser = userStr.charAt(0);
-        switch (charUser) {
-            case 'К':
-                return RockScissorsPaper.ROCK;
-            case 'Н':
-                return RockScissorsPaper.SCISSORS;
-            case 'Б':
-                return RockScissorsPaper.PAPER;
-        }
-        System.out.println("Неккоректный ввод");
-        return getMove();
-    }
 
     public int getName() {
         return name;
