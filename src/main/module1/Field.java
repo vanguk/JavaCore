@@ -1,27 +1,34 @@
 package main.module1;
 
-import java.io.InputStream;
-import java.util.Scanner;
+
+import java.util.Arrays;
 
 public class Field {
     private Player[] players;
-    int round = 0;
+    int round = 1;
+
+    public Field(int i) {
+        this.players = new Player[i];
+    }
+
 
     public Field() {
         System.out.println("Введите количество игроков");
-        Scanner scanner = new Scanner(System.in);
-        Integer howPlayer = scanner.nextInt();
-        scanner.close();
+        Integer howPlayer = Integer.valueOf(GameLogic.scannerString());
         this.players = new Player[howPlayer];
         players[0] = new User();
         for (int i = 1; i < howPlayer; i++) {
             players[i] = new Computer();
         }
     }
-    public RockScissorsPaper[] getAllValue (){
-        RockScissorsPaper[] mas = new RockScissorsPaper[players.length];
-        for (int i = 0; i < players.length; i++) {
-            mas[i] = players[i].getRockScissorsPaper();
+
+    public RockScissorsPaper[] getAllValue() {
+        RockScissorsPaper[] mas = new RockScissorsPaper[this.players.length];
+        for (int i = 0; i < this.players.length; i++) {
+            if (players[i] != null) {
+                mas[i] = this.players[i].getRockScissorsPaper();
+            }
+
         }
         return mas;
     }
@@ -36,5 +43,15 @@ public class Field {
 
     public int getRound() {
         return round;
+    }
+
+    public boolean isEmpty() {
+        boolean b = true;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] != null) {
+                b = false;
+            }
+        }
+        return b;
     }
 }

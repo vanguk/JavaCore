@@ -4,8 +4,7 @@ public enum RockScissorsPaper {
     ROCK,
     SCISSORS,
     PAPER;
+
 }
 
-   /*
-        return 0;
-    }*/
+

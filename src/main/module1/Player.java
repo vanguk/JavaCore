@@ -1,13 +1,11 @@
 package main.module1;
 
-import java.util.Random;
 
 public abstract class Player {
     protected static int id = 0;
     protected RockScissorsPaper rockScissorsPaper;
 
 
-    public abstract boolean playAgain();
 
     public static int getId() {
         return id;
@@ -25,5 +23,5 @@ public abstract class Player {
         this.rockScissorsPaper = rockScissorsPaper;
     }
 
-    public abstract int getName();
+    public abstract String getName();
 }

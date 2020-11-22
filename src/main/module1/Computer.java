@@ -3,16 +3,12 @@ package main.module1;
 import java.util.Random;
 
 public class Computer extends Player {
-    private int name;
+    private String name;
 
     public Computer() {
-        this.name = id++;
+        this.name = "Компьютер " + id++;
     }
-    @Override
-    public boolean playAgain() {
-        return false;
-    }
-    public int getName() {
+    public String getName() {
         return name;
     }
 }

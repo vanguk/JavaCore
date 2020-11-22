@@ -1,7 +1,6 @@
 package main.module1;
 
-import java.util.Arrays;
-import java.util.HashSet;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -9,94 +8,53 @@ import static main.module1.RockScissorsPaper.*;
 
 public class GameLogic {
 
-    private void startPlay(Field field) {
-        for (int i = 0; i < field.getPlayers().length; i++) {
-            Player player = field.getPlayers()[i];
-            GameLogic.getMove(player);
+    private static void startPlay(Field field) {
+        GameLogic.allGetMove(field);
+        for (Player player : field.getPlayers()) {
+            if (player != null) System.out.println(player.rockScissorsPaper);
         }
-        if (Arrays.asList(field.getAllValue()).contains(ROCK) &
-                Arrays.asList(field.getAllValue()).contains(PAPER) &
-                Arrays.asList(field.getAllValue()).contains(SCISSORS)) {
-            for (RockScissorsPaper RSP : field.getAllValue()) {
-                System.out.println(RSP);
-            }
-            System.out.println("Ничья");
-            startPlay(field);
-        } else if (field.getPlayers().length == 2) {
-            switch (GameLogic.compareMove(field.getPlayers()[0], field.getPlayers()[1])) {
-                case 0:
-                    System.out.println(field.getPlayers()[0].rockScissorsPaper + " vs " + field.getPlayers()[1].rockScissorsPaper + " Ничья");
-                    break;
-                case 1:
-                    System.out.println(field.getPlayers()[0].rockScissorsPaper + " vs " + field.getPlayers()[1].rockScissorsPaper + " Вы выграли");
-                    break;
-                case -1:
-                    System.out.println(field.getPlayers()[0].rockScissorsPaper + " vs " + field.getPlayers()[1].rockScissorsPaper + " Вы проиграли");
-                    break;
-            }
-        } else if (Arrays.asList(field.getAllValue()).contains(ROCK) &
-                Arrays.asList(field.getAllValue()).contains(SCISSORS)) {
-            Player[] newPlayers = new Player[field.getPlayers().length];
-            for (int i = 0; i < field.getPlayers().length; i++) {
-                Player player = field.getPlayers()[i];
-                if (player.rockScissorsPaper == ROCK) {
-                    newPlayers[i] = player;
-                }
-            }
-            field.setPlayers(newPlayers);
-            startPlay(field);
-        } else if (Arrays.asList(field.getAllValue()).contains(SCISSORS) &
-                Arrays.asList(field.getAllValue()).contains(PAPER)) {
-            Player[] newPlayers = new Player[field.getPlayers().length];
-            for (int i = 0; i < field.getPlayers().length; i++) {
-                Player player = field.getPlayers()[i];
-                if (player.rockScissorsPaper == SCISSORS) {
-                    newPlayers[i] = player;
-                }
-            }
-            field.setPlayers(newPlayers);
-            startPlay(field);
-        } else if (Arrays.asList(field.getAllValue()).contains(PAPER) &
-                Arrays.asList(field.getAllValue()).contains(ROCK)) {
-            Player[] newPlayers = new Player[field.getPlayers().length];
-            for (int i = 0; i < field.getPlayers().length; i++) {
-                Player player = field.getPlayers()[i];
-                if (player.rockScissorsPaper == PAPER) {
-                    newPlayers[i] = player;
-                }
-            }
-            field.setPlayers(newPlayers);
+        RockScissorsPaper[] values = field.getAllValue();
+        if (containsRollTypePairExcluded(PAPER, values)) {
+            validateWinnerWith(ROCK, field);
+        } else if (containsRollTypePairExcluded(ROCK, values)) {
+            validateWinnerWith(SCISSORS, field);
+        } else if (containsRollTypePairExcluded(SCISSORS, values)) {
+            validateWinnerWith(PAPER, field);
+        } else {
+            System.out.println("Следующий раунд " + ++field.round);
             startPlay(field);
         }
     }
 
-
-    public static void start(Field field) {
+    public static void start() {
         GameLogic gameLogic = new GameLogic();
-        gameLogic.startPlay(field);
+        gameLogic.startPlay(new Field());
     }
 
     private static void getMove(Player player) {
         if (player instanceof User) {
             System.out.println("Ход игрока : Player " + player.getName());
-            System.out.print("Выбирите : Камень, Ножницы или Бумага \n");
-            Scanner scanner = new Scanner(System.in);
-            String userStr = scanner.nextLine();
-            userStr = userStr.toUpperCase();
+            System.out.print("Выберите : Камень, Ножницы или Бумага \n");
+            String userStr = GameLogic.scannerString();
             char charUser = userStr.charAt(0);
             switch (charUser) {
                 case 'К':
                     player.setRockScissorsPaper(ROCK);
+                    break;
                 case 'Н':
                     player.setRockScissorsPaper(SCISSORS);
+                    break;
                 case 'Б':
                     player.setRockScissorsPaper(PAPER);
+                    break;
+                default:
+                    System.out.println("Неккоректный ввод");
+                    getMove(player);
             }
-            scanner.close();
-            System.out.println("Неккоректный ввод");
-            getMove(player);
+
         } else {
-            player.rockScissorsPaper = RockScissorsPaper.values()[new Random().nextInt(RockScissorsPaper.values().length)];
+            if (player instanceof Computer)
+                player.setRockScissorsPaper(RockScissorsPaper.values()[new Random().nextInt(RockScissorsPaper.values().length)]);
         }
     }
 
@@ -114,6 +72,60 @@ public class GameLogic {
             }
         }
         return 0;
+    }
+
+    private static void allGetMove(Field field) {
+        for (int i = 0; i < field.getPlayers().length; i++) {
+            GameLogic.getMove(field.getPlayers()[i]);
+        }
+    }
+
+    public static String scannerString() {
+        Scanner scanner = new Scanner(System.in);
+        String str = scanner.nextLine();
+        return str;
+    }
+
+    private static void printRSP(Field field) {
+        for (RockScissorsPaper RSP : field.getAllValue()) {
+            System.out.println(RSP);
+        }
+    }
+
+    public static boolean hasWinner(Player[] players) {
+        int count = 0;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] != null) count++;
+        }
+        return count == 1;
+    }
+
+    public static void validateWinnerWith(RockScissorsPaper roll, Field field) {
+        Field newField = new Field(field.getPlayers().length);
+        int j = 0;
+        for (int i = 0; i < field.getPlayers().length; i++) {
+            Player player = field.getPlayers()[i];
+            if (player == null) continue;
+            if (player.rockScissorsPaper == roll) {
+                newField.getPlayers()[j] = player;
+                j++;
+            }
+        }
+        if (hasWinner(newField.getPlayers())) {
+            System.out.println("Победил " + newField.getPlayers()[0].getName());
+            System.out.println("Конец игры");
+        }
+        else {
+            System.out.println("Следующий раунд " + ++field.round);
+            startPlay(newField);
+        }
+    }
+
+    public static boolean containsRollTypePairExcluded(RockScissorsPaper roll, RockScissorsPaper[] array) {
+        for (RockScissorsPaper item : array) {
+            if (item == roll) return false;
+        }
+        return true;
     }
 }
 
