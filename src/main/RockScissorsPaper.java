@@ -1,4 +1,4 @@
-package main.module1;
+package main;
 
 public enum RockScissorsPaper {
     ROCK,

@@ -1,10 +1,12 @@
-package main.module1;
+package main.model;
 
+
+import main.RockScissorsPaper;
 
 public abstract class Player {
     protected static int id = 0;
-    protected RockScissorsPaper rockScissorsPaper;
-
+    public RockScissorsPaper rockScissorsPaper;
+    protected String name;
 
 
     public static int getId() {
@@ -23,5 +25,7 @@ public abstract class Player {
         this.rockScissorsPaper = rockScissorsPaper;
     }
 
-    public abstract String getName();
+    public String getName(){
+        return name;
+    }
 }

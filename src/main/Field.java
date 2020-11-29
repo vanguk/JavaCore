@@ -1,7 +1,9 @@
-package main.module1;
+package main;
 
 
-import java.util.Arrays;
+import main.model.Computer;
+import main.model.Player;
+import main.model.User;
 
 public class Field {
     private Player[] players;
